@@ -18,7 +18,7 @@ class DetailsScreenViewModel @Inject constructor(
     private val todoTaskRepository: TodoTaskRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
-    private var item: MutableState<TodoTaskUIModel> = mutableStateOf( TodoTaskUIModel.from(savedStateHandle))
+    private var item: MutableState<TodoTaskUIModel> = mutableStateOf(TodoTaskUIModel.from(savedStateHandle))
 
     fun getTodoTask(): TodoTaskUIModel {
         return item.value

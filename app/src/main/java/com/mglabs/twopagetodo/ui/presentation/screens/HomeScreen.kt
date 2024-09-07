@@ -13,13 +13,10 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.currentCompositeKeyHash
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.mglabs.twopagetodo.domain.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.components.LoadingContent
 import com.mglabs.twopagetodo.ui.presentation.layouts.AppBarLayout
@@ -29,14 +26,11 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
-    screenModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
+    screenModel: HomeScreenViewModel,
     onNavigateToDetails: (TodoTask) -> Unit
 ) {
-    val state by screenModel.mutableState.collectAsState()
-    LaunchedEffect(currentCompositeKeyHash) {
-        // init items
-        screenModel.getItems()
-    }
+
+    val state by screenModel.uiState.collectAsState()
     val onEdit: (todo: TodoTask) -> Unit = { todo ->
         onNavigateToDetails(todo)
     }
@@ -60,7 +54,7 @@ fun HomeScreen(
         content = {
             when (val result = state) {
                 is HomeScreenViewModel.State.Loading -> LoadingContent()
-                is HomeScreenViewModel.State.Result -> ListItems(
+                is HomeScreenViewModel.State.Success -> ListItems(
                     result.items,
                     onEdit = onEdit,
                     onDelete = onDelete
