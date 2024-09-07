@@ -55,9 +55,8 @@ fun HomeScreen(
     }
 
     AppBarLayout(
-        title = "My Notes",
+        title = "My Todo List",
         floatingButton = { FloatingButton(onFloatingActionClick) },
-        onPrev = {},
         content = {
             when (val result = state) {
                 is HomeScreenViewModel.State.Loading -> LoadingContent()

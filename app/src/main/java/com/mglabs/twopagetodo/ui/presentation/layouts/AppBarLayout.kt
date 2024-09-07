@@ -26,7 +26,7 @@ fun AppBarLayout(
     content: @Composable () -> Unit,
     navActions: @Composable (() -> Unit)? = null,
     floatingButton: @Composable (() -> Unit)? = null,
-    onPrev: () -> Unit
+    onPrev: (() -> Unit)? = null
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -60,7 +60,7 @@ fun AppBar(
     title: String,
     scrollBehavior: TopAppBarScrollBehavior,
     navActions: @Composable () -> Unit,
-    onPrev: (() -> Unit)?
+    onPrev: (() -> Unit)? = null
 ) {
     TopAppBar(title = {
         Text(text = title, color = Color.Red)
