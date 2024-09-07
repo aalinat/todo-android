@@ -14,10 +14,10 @@ import com.mglabs.twopagetodo.ui.presentation.viewmodels.HomeScreenViewModel
 fun AppNavHost(
     navController: NavHostController,
 ) {
+    val homeScreenViewModel = hiltViewModel<HomeScreenViewModel>()
     NavHost(navController = navController, startDestination = HomeScreenUIModel) {
         composable<HomeScreenUIModel> {
-            val viewModel = hiltViewModel<HomeScreenViewModel>()
-            HomeScreen(viewModel, onNavigateToDetails = { todo: TodoTask ->
+            HomeScreen(homeScreenViewModel, onNavigateToDetails = { todo: TodoTask ->
                 navController.navigate(todo.transform())
             })
         }

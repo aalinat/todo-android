@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.mglabs.twopagetodo.domain.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.components.LoadingContent
 import com.mglabs.twopagetodo.ui.presentation.layouts.AppBarLayout
@@ -26,7 +27,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
-    screenModel: HomeScreenViewModel,
+    screenModel: HomeScreenViewModel  = hiltViewModel<HomeScreenViewModel>(),
     onNavigateToDetails: (TodoTask) -> Unit
 ) {
 

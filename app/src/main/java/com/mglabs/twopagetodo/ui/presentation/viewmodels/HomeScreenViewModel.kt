@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
-    private val todoTaskRepository: TodoTaskRepository,
+    private val todoTaskRepository: TodoTaskRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<State> = MutableStateFlow(State.Loading)
@@ -20,23 +20,28 @@ class HomeScreenViewModel @Inject constructor(
     val uiState = _uiState
 
     init {
-        viewModelScope.launch {
-            delay(3000)
-            _uiState.value = State.Success(items = todoTaskRepository.findAll())
-        }
+        fetchTasks()
     }
 
     fun addItem(todo: TodoTask) {
         viewModelScope.launch {
             todoTaskRepository.create(todo)
-            _uiState.value = State.Success(items = todoTaskRepository.findAll())
+            fetchTasks()
         }
     }
 
     fun deleteItem(id: Int) {
         viewModelScope.launch {
             todoTaskRepository.delete(id)
-            _uiState.value = State.Success(items = todoTaskRepository.findAll())
+            fetchTasks()
+        }
+    }
+
+    private fun fetchTasks() {
+        viewModelScope.launch {
+            _uiState.value = State.Loading
+            delay(3000)
+            _uiState.value = State.Success(todoTaskRepository.findAll())
         }
     }
 
