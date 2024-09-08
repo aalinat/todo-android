@@ -40,7 +40,7 @@ class HomeScreenViewModel @Inject constructor(
     private fun fetchTasks() {
         viewModelScope.launch {
             _uiState.value = State.Loading
-            delay(3000)
+            delay(1000)
             _uiState.value = State.Success(todoTaskRepository.findAll())
         }
     }

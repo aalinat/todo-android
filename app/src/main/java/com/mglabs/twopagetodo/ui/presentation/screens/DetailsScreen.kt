@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.FavoriteBorder
+import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Icon
@@ -14,50 +15,80 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.mglabs.twopagetodo.ui.presentation.components.EditableText
 import com.mglabs.twopagetodo.ui.presentation.layouts.AppBarLayout
 import com.mglabs.twopagetodo.ui.presentation.viewmodels.DetailsScreenViewModel
+import com.mglabs.twopagetodo.ui.theme.editableTitleOutlinedTextFieldColors
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
 @Composable
 fun DetailsScreen(onNavigateToHome: () -> Unit) {
     val viewModel: DetailsScreenViewModel = hiltViewModel<DetailsScreenViewModel>()
-    val item = viewModel.getTodoTask()
+    val state by viewModel.uiState.collectAsState()
+    val contentValue = remember {
+        mutableStateOf(state.content)
+    }
+    val titleValue = remember {
+        mutableStateOf(state.title)
+    }
     AppBarLayout(
-            title = item.title,
-            onPrev = onNavigateToHome,
-            navActions = {
-                FavoriteAction(item.isFavorite) {
-                    when (item.isFavorite) {
-                        true -> viewModel.unFavorite()
-                        false -> viewModel.favorite()
+        title = {
+            EditableText(
+                isEditMode = state.isEditMode,
+                content = titleValue.value,
+                colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors
+            ) { text: String ->
+                titleValue.value = text
+            }
+        },
+        onPrev = onNavigateToHome,
+        navActions = {
+            FavoriteAction(state.isFavorite) {
+                when (state.isFavorite) {
+                    true -> viewModel.unFavorite()
+                    false -> viewModel.favorite()
+                }
+            }
+            UpdateAction(isEditMode = state.isEditMode) {
+                when (state.isEditMode) {
+                    true -> {
+                        viewModel.updateItem(titleValue.value, contentValue.value)
+                        viewModel.setEditMode(false)
                     }
-                }
-                UpdateAction { viewModel.updateItem(item) }
-                DeleteAction {viewModel.deleteItem()}
-            },
-            content = {
-                Column(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(24.dp)
-                ) {
-                    Text(
-                        text = item.createdAt,
-                        color = MaterialTheme.colorScheme.secondary,
-                    )
-                    Text(text = "By ${item.author}")
-                    Text(text = "is favorite? ${item.isFavorite}")
-                    Text(text = "is deleted? ${item.isDeleted}")
 
-                    Spacer(modifier = Modifier.padding(10.dp))
-
-                    Spacer(modifier = Modifier.padding(10.dp))
-                    Text(text = item.content, style = MaterialTheme.typography.bodyLarge)
+                    false -> viewModel.setEditMode(true)
                 }
-            })
+            }
+            DeleteAction { viewModel.deleteItem() }
+        },
+        content = {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(24.dp)
+            ) {
+                Text(
+                    text = toFormattedDate(state.createdAt),
+                    color = MaterialTheme.colorScheme.secondary,
+                )
+                Spacer(modifier = Modifier.padding(10.dp))
+                Text(text = "By ${state.author}")
+                Spacer(modifier = Modifier.padding(10.dp))
+                EditableText(isEditMode = state.isEditMode,
+                    content = contentValue.value, onValueChange = { text: String ->
+                        contentValue.value = text
+                    })
+            }
+        })
 
 }
 
@@ -71,7 +102,7 @@ fun FavoriteAction(isFavorite: Boolean, onAction: () -> Unit) {
 }
 
 @Composable
-fun FavIcon(isFavorite: Boolean){
+fun FavIcon(isFavorite: Boolean) {
     var favIcon = Icons.Default.FavoriteBorder
     var favIconDescription = "Mark as Favorite"
     if (isFavorite) {
@@ -80,11 +111,16 @@ fun FavIcon(isFavorite: Boolean){
     }
     Icon(imageVector = favIcon, contentDescription = favIconDescription)
 }
+
 @Composable
-fun UpdateAction(onUpdate: () -> Unit) {
+fun UpdateAction(isEditMode: Boolean = false, onUpdate: () -> Unit) {
+    var imageVector = Icons.Outlined.Edit
+    if (isEditMode) {
+        imageVector = Icons.Outlined.Check
+    }
     IconButton(onClick = onUpdate) {
         Icon(
-            imageVector = Icons.Outlined.Edit,
+            imageVector = imageVector,
             contentDescription = "Edit Item"
         )
     }
@@ -98,4 +134,8 @@ fun DeleteAction(onDelete: () -> Unit) {
             contentDescription = "Delete Item"
         )
     }
+}
+
+fun toFormattedDate(date: String): String {
+    return LocalDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm"))
 }

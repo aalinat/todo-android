@@ -3,9 +3,8 @@ package com.mglabs.twopagetodo.data.repository
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import com.mglabs.twopagetodo.domain.TodoTask
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
-import java.util.Date
 
-class TodoTaskRepositoryImpl: TodoTaskRepository {
+class TodoTaskRepositoryImpl : TodoTaskRepository {
     private val _todos: MutableList<TodoTask> = mutableListOf()
 
     init {
@@ -20,20 +19,18 @@ class TodoTaskRepositoryImpl: TodoTaskRepository {
             )
         }
     }
+
     override fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
         return _todos.filter { predicate(it) }
     }
 
     override fun findAll(): List<TodoTask> {
-        return filterBy  { !it.isDeleted }
+        return filterBy { !it.isDeleted }
     }
 
-    override fun update(todo: TodoTask): TodoTask? {
-        var foundItem = findById(todo.id)
-        foundItem?.let {
-            foundItem = todo
-        }
-        return foundItem
+    override fun update(todo: TodoTask): TodoTask {
+        _todos.replaceAll { if (it.id == todo.id) todo else it }
+        return todo
     }
 
     override fun favorite(id: Int): TodoTask? {

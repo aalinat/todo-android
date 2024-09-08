@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.mglabs.twopagetodo.domain.TodoTask
@@ -50,7 +51,9 @@ fun HomeScreen(
     }
 
     AppBarLayout(
-        title = "My Todo List",
+        title = {
+            Text(text = "My Todo List", color = Color.Red)
+        },
         floatingButton = { FloatingButton(onFloatingActionClick) },
         content = {
             when (val result = state) {

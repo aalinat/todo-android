@@ -12,20 +12,25 @@ private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
 @Serializable
 object HomeScreenUIModel
 
+
 @Serializable
-data class TodoTaskUIModel(var id: Int,
-                           var author: String,
-                           var title: String,
-                           var content: String,
-                           var createdAt: String,
-                           var isFavorite: Boolean = false,
-                           var isDeleted: Boolean = false) {
+data class DetailScreenUIModel(
+    var id: Int,
+    var author: String,
+    var title: String,
+    var content: String,
+    var createdAt: String,
+    var isFavorite: Boolean = false,
+    var isDeleted: Boolean = false,
+    var isEditMode: Boolean = false
+) {
     companion object {
         fun from(savedStateHandle: SavedStateHandle) =
-            savedStateHandle.toRoute<TodoTaskUIModel>()
+            savedStateHandle.toRoute<DetailScreenUIModel>()
     }
 }
-fun TodoTaskUIModel.transform(): TodoTask {
+
+fun DetailScreenUIModel.transform(): TodoTask {
     return TodoTask(
         id,
         author,
@@ -36,8 +41,9 @@ fun TodoTaskUIModel.transform(): TodoTask {
         isDeleted
     )
 }
-fun TodoTask.transform(): TodoTaskUIModel {
-    return TodoTaskUIModel(
+
+fun TodoTask.transform(): DetailScreenUIModel {
+    return DetailScreenUIModel(
         id,
         author,
         title,
