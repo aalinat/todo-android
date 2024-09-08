@@ -3,6 +3,7 @@ package com.mglabs.twopagetodo.ui.presentation.components
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
@@ -15,7 +16,8 @@ fun EditableText(
     content: String,
     colors: TextFieldColors = MaterialTheme.colorScheme.editableOutlinedTextFieldColors,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
-    onValueChange: (text: String) -> Unit
+    onValueChange: (text: String) -> Unit,
+    onValidate: (String) -> Boolean
 ) {
     OutlinedTextField(
         shape = RoundedCornerShape(8.dp),
@@ -23,6 +25,7 @@ fun EditableText(
         textStyle = textStyle,
         readOnly = !isEditMode,
         enabled = isEditMode,
+        isError = !onValidate(content),
         value = content,
         onValueChange = onValueChange
     )

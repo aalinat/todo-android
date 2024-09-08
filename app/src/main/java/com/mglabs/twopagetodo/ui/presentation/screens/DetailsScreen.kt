@@ -13,6 +13,7 @@ import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,35 +23,42 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewModelScope
 import com.mglabs.twopagetodo.ui.presentation.components.EditableText
 import com.mglabs.twopagetodo.ui.presentation.layouts.AppBarLayout
 import com.mglabs.twopagetodo.ui.presentation.viewmodels.DetailsScreenViewModel
 import com.mglabs.twopagetodo.ui.theme.editableTitleOutlinedTextFieldColors
+import kotlinx.coroutines.launch
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 @Composable
-fun DetailsScreen(onNavigateToHome: () -> Unit) {
+fun DetailsScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () -> Unit) {
     val viewModel: DetailsScreenViewModel = hiltViewModel<DetailsScreenViewModel>()
     val state by viewModel.uiState.collectAsState()
+
     val contentValue = remember {
         mutableStateOf(state.content)
     }
     val titleValue = remember {
         mutableStateOf(state.title)
     }
+    val onValidate = { text: String -> text.isNotEmpty() }
     AppBarLayout(
         title = {
             EditableText(
+                onValidate = onValidate,
                 isEditMode = state.isEditMode,
                 content = titleValue.value,
-                colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors
-            ) { text: String ->
-                titleValue.value = text
-            }
+                colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,
+                onValueChange = { text: String ->
+                    titleValue.value = text
+                }
+            )
         },
         onPrev = onNavigateToHome,
+        snackBarHostState = snackBarHostState,
         navActions = {
             FavoriteAction(state.isFavorite) {
                 when (state.isFavorite) {
@@ -61,8 +69,20 @@ fun DetailsScreen(onNavigateToHome: () -> Unit) {
             UpdateAction(isEditMode = state.isEditMode) {
                 when (state.isEditMode) {
                     true -> {
-                        viewModel.updateItem(titleValue.value, contentValue.value)
-                        viewModel.setEditMode(false)
+                        if (onValidate(titleValue.value) && onValidate(contentValue.value)
+                        ) {
+                            if ((titleValue.value != state.title || contentValue.value != state.content)) {
+                                viewModel.viewModelScope.launch {
+                                    viewModel.updateItem(titleValue.value, contentValue.value)
+                                    snackBarHostState.showSnackbar("Updated...")
+                                }
+                            }
+                            viewModel.setEditMode(false)
+                        } else {
+                            viewModel.viewModelScope.launch {
+                                snackBarHostState.showSnackbar("Validation error!")
+                            }
+                        }
                     }
 
                     false -> viewModel.setEditMode(true)
@@ -83,10 +103,12 @@ fun DetailsScreen(onNavigateToHome: () -> Unit) {
                 Spacer(modifier = Modifier.padding(10.dp))
                 Text(text = "By ${state.author}")
                 Spacer(modifier = Modifier.padding(10.dp))
-                EditableText(isEditMode = state.isEditMode,
+                EditableText(
+                    isEditMode = state.isEditMode,
                     content = contentValue.value, onValueChange = { text: String ->
                         contentValue.value = text
-                    })
+                    }, onValidate = onValidate
+                )
             }
         })
 

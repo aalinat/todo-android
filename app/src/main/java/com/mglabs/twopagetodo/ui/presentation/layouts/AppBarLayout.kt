@@ -9,6 +9,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -22,9 +24,10 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 fun AppBarLayout(
     title: @Composable () -> Unit,
     content: @Composable () -> Unit,
+    snackBarHostState: SnackbarHostState,
     navActions: @Composable (() -> Unit)? = null,
     floatingButton: @Composable (() -> Unit)? = null,
-    onPrev: (() -> Unit)? = null
+    onPrev: (() -> Unit)? = null,
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
 
@@ -36,6 +39,9 @@ fun AppBarLayout(
             if (floatingButton != null) {
                 floatingButton()
             }
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackBarHostState)
         },
         topBar = {
             AppBar(title, scrollBehavior, { navActions?.let { it() } }, onPrev)

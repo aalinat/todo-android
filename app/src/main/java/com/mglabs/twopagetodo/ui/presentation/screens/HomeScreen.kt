@@ -11,6 +11,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -28,6 +29,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun HomeScreen(
+    snackBarHostState: SnackbarHostState,
     screenModel: HomeScreenViewModel  = hiltViewModel<HomeScreenViewModel>(),
     onNavigateToDetails: (TodoTask) -> Unit
 ) {
@@ -54,6 +56,7 @@ fun HomeScreen(
         title = {
             Text(text = "My Todo List", color = Color.Red)
         },
+        snackBarHostState = snackBarHostState,
         floatingButton = { FloatingButton(onFloatingActionClick) },
         content = {
             when (val result = state) {
