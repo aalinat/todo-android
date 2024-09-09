@@ -1,4 +1,4 @@
-package com.mglabs.twopagetodo.ui.presentation.viewmodels
+package com.mglabs.twopagetodo.ui.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -9,6 +9,8 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.roundToInt
+
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
@@ -22,12 +24,15 @@ class HomeScreenViewModel @Inject constructor(
     init {
         fetchTasks()
     }
-
-    fun addItem(todo: TodoTask) {
-        viewModelScope.launch {
-            todoTaskRepository.create(todo)
-            fetchTasks()
-        }
+    fun onFloatingActionClick() {
+        addItem(
+            TodoTask(
+                (Math.random() * 1000).roundToInt(),
+                "Ahmad",
+                "title",
+                "content"
+            )
+        )
     }
 
     fun deleteItem(id: Int) {
@@ -36,6 +41,16 @@ class HomeScreenViewModel @Inject constructor(
             fetchTasks()
         }
     }
+
+
+    private fun addItem(todo: TodoTask) {
+        viewModelScope.launch {
+            todoTaskRepository.create(todo)
+            fetchTasks()
+        }
+    }
+
+
 
     private fun fetchTasks() {
         viewModelScope.launch {

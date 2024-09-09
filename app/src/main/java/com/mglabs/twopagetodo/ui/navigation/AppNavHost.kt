@@ -7,23 +7,26 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mglabs.twopagetodo.domain.TodoTask
-import com.mglabs.twopagetodo.ui.presentation.screens.DetailsScreen
-import com.mglabs.twopagetodo.ui.presentation.screens.HomeScreen
+import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreen
+import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreenState
+import com.mglabs.twopagetodo.ui.presentation.details.transform
+import com.mglabs.twopagetodo.ui.presentation.home.HomeScreen
+import com.mglabs.twopagetodo.ui.presentation.home.HomeScreenState
 
 @Composable
 fun AppNavHost(
     navController: NavHostController,
 ) {
     val snackBarHostState = remember { SnackbarHostState() }
-    NavHost(navController = navController, startDestination = HomeScreenUIModel) {
-        composable<HomeScreenUIModel> {
-            HomeScreen(snackBarHostState = snackBarHostState, onNavigateToDetails = { todo: TodoTask ->
+    NavHost(navController = navController, startDestination = HomeScreenState) {
+        composable<HomeScreenState> {
+            HomeScreen(snackBarHostState, onNavigateToDetails = { todo: TodoTask ->
                 navController.navigate(todo.transform())
             })
         }
-        composable<DetailScreenUIModel> {
-            DetailsScreen(snackBarHostState = snackBarHostState,onNavigateToHome = {
-                navController.navigate(HomeScreenUIModel)
+        composable<DetailsScreenState> {
+            DetailsScreen(snackBarHostState, onNavigateToHome = {
+                navController.navigate(HomeScreenState)
             })
         }
     }

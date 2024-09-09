@@ -20,20 +20,20 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         }
     }
 
-    override fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
+    override suspend fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
         return _todos.filter { predicate(it) }
     }
 
-    override fun findAll(): List<TodoTask> {
+    override suspend fun findAll(): List<TodoTask> {
         return filterBy { !it.isDeleted }
     }
 
-    override fun update(todo: TodoTask): TodoTask {
+    override suspend fun update(todo: TodoTask): TodoTask {
         _todos.replaceAll { if (it.id == todo.id) todo else it }
         return todo
     }
 
-    override fun favorite(id: Int): TodoTask? {
+    override suspend fun favorite(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isFavorite = true
@@ -41,7 +41,7 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override fun unFavorite(id: Int): TodoTask? {
+    override suspend fun unFavorite(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isFavorite = false
@@ -49,7 +49,7 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override fun delete(id: Int): TodoTask? {
+    override suspend fun delete(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isDeleted = true
@@ -57,12 +57,12 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override fun create(todo: TodoTask): TodoTask {
+    override suspend fun create(todo: TodoTask): TodoTask {
         _todos.add(todo)
         return todo
     }
 
-    override fun findById(todoTaskId: Int): TodoTask? {
+    override suspend fun findById(todoTaskId: Int): TodoTask? {
         return _todos.find { it.id == todoTaskId }
     }
 }

@@ -1,4 +1,4 @@
-package com.mglabs.twopagetodo.ui.navigation
+package com.mglabs.twopagetodo.ui.presentation.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
@@ -9,28 +9,27 @@ import java.time.format.DateTimeFormatter
 
 private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
 
-@Serializable
-object HomeScreenUIModel
+
+data class DetailsFormState(var title: String, var content: String, var author: String, var createdAt: String, var isEditMode: Boolean)
 
 
 @Serializable
-data class DetailScreenUIModel(
+data class DetailsScreenState(
     var id: Int,
     var author: String,
     var title: String,
     var content: String,
     var createdAt: String,
     var isFavorite: Boolean = false,
-    var isDeleted: Boolean = false,
-    var isEditMode: Boolean = false
+    var isDeleted: Boolean = false
 ) {
     companion object {
         fun from(savedStateHandle: SavedStateHandle) =
-            savedStateHandle.toRoute<DetailScreenUIModel>()
+            savedStateHandle.toRoute<DetailsScreenState>()
     }
 }
 
-fun DetailScreenUIModel.transform(): TodoTask {
+fun DetailsScreenState.transform(): TodoTask {
     return TodoTask(
         id,
         author,
@@ -42,8 +41,18 @@ fun DetailScreenUIModel.transform(): TodoTask {
     )
 }
 
-fun TodoTask.transform(): DetailScreenUIModel {
-    return DetailScreenUIModel(
+fun DetailsScreenState.toForm(): DetailsFormState {
+    return DetailsFormState(
+        title = title,
+        content = content,
+        author = author,
+        createdAt = createdAt,
+        isEditMode = false
+    )
+}
+
+fun TodoTask.transform(): DetailsScreenState {
+    return DetailsScreenState(
         id,
         author,
         title,
