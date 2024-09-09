@@ -41,7 +41,6 @@ fun DetailsScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () -> 
         formState = formState,
         isFavorite = state.isFavorite,
         snackBarHostState = snackBarHostState,
-        onValidateText = viewModel::onValidateText,
         onTitleValueChange = viewModel::onTitleValueChange,
         onNavigateToHome = onNavigateToHome,
         onEditClicked = onEditClicked,
@@ -51,7 +50,6 @@ fun DetailsScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () -> 
     ) {
         ItemDetailsForm(
             formState,
-            viewModel::onValidateText,
             viewModel::onContentValueChange
         )
     }

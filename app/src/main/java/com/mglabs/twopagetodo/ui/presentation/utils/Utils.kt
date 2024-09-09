@@ -6,3 +6,7 @@ import java.time.format.DateTimeFormatter
 fun toFormattedDate(date: String): String {
     return LocalDateTime.parse(date).format(DateTimeFormatter.ofPattern("yyyy-mm-dd HH:mm"))
 }
+
+fun validateText(text: String): Boolean {
+    return text.isNotEmpty()
+}

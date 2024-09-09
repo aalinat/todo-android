@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsFormState
+import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 import com.mglabs.twopagetodo.ui.theme.editableTitleOutlinedTextFieldColors
 
 
@@ -43,7 +44,6 @@ fun HomeScreenLayout(
 fun DetailsScreenLayout(
     formState: DetailsFormState,
     isFavorite: Boolean,
-    onValidateText: (text: String) -> Boolean,
     snackBarHostState: SnackbarHostState,
     onTitleValueChange: (text: String) -> Unit,
     onNavigateToHome: (() -> Unit)? = null,
@@ -56,7 +56,7 @@ fun DetailsScreenLayout(
     AppBarLayout(
         title = {
             EditableText(
-                onValidate = onValidateText,
+                onValidate = {text: String -> validateText(text)},
                 isEditMode = formState.isEditMode,
                 content = formState.title,
                 colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,

@@ -19,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import com.mglabs.twopagetodo.domain.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsFormState
 import com.mglabs.twopagetodo.ui.presentation.utils.toFormattedDate
+import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 
 @Composable
 fun ItemList(
@@ -51,7 +52,6 @@ fun ItemList(
 @Composable
 fun ItemDetailsForm(
     formState: DetailsFormState,
-    onValidateText: (text: String) -> Boolean,
     onContentValueChange: (text: String) -> Unit
 ) {
     Column(
@@ -70,7 +70,7 @@ fun ItemDetailsForm(
             isEditMode = formState.isEditMode,
             content = formState.content,
             onValueChange = onContentValueChange,
-            onValidate = onValidateText
+            onValidate = {text: String -> validateText(text) }
         )
     }
 }

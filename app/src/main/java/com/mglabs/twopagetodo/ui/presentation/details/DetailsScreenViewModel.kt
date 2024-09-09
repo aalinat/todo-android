@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
+import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -68,16 +69,12 @@ class DetailsScreenViewModel @Inject constructor(
         _formState.value = _formState.value.copy(content = text)
     }
 
-    fun onValidateText(text: String): Boolean {
-        return text.isNotEmpty()
-    }
-
 
     fun onEditForm(): FormEvent? {
         val state = _formState.value;
         when (state.isEditMode) {
             true -> {
-                if (onValidateText(_formState.value.title) && onValidateText(_formState.value.content)
+                if (validateText(_formState.value.title) && validateText(_formState.value.content)
                 ) {
                     if (isFormChanged(_formState.value)) {
                         updateItem(_formState.value)
