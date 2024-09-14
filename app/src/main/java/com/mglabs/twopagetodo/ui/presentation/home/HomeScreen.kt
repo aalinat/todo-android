@@ -24,8 +24,10 @@ fun HomeScreen(
             is HomeScreenViewModel.State.Loading -> LoadingContent()
             is HomeScreenViewModel.State.Success -> ItemList(
                 result.items,
-                onEdit = { todo -> onNavigateToDetails(todo)},
-                onDelete = { todo -> viewModel.deleteItem(todo.id)}
+                onEdit = { todo -> onNavigateToDetails(todo) },
+                onDelete = { todo -> viewModel.deleteItem(todo.id) },
+                onFavorite = { todo -> viewModel.favorite(todo.id) },
+                onUnFavorite = { todo -> viewModel.unFavorite(todo.id) },
             )
         }
     }

@@ -8,9 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Delete
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,7 +22,9 @@ import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 fun ItemList(
     items: List<TodoTask>,
     onEdit: (todo: TodoTask) -> Unit,
-    onDelete: (todo: TodoTask) -> Unit
+    onDelete: (todo: TodoTask) -> Unit,
+    onFavorite: (todo: TodoTask) -> Unit,
+    onUnFavorite: (todo: TodoTask) -> Unit,
 ) {
     LazyColumn {
         itemsIndexed(items) { _, item ->
@@ -38,12 +37,13 @@ fun ItemList(
                     Modifier
                         .weight(1f)
                         .clickable { onEdit(item) })
-                Icon(
-                    imageVector = Icons.Outlined.Delete,
-                    contentDescription = "Delete",
-                    Modifier.clickable {
-                        onDelete(item)
-                    })
+                DeleteAction { onDelete(item) }
+                FavoriteAction(item.isFavorite) {
+                    when (item.isFavorite) {
+                        true -> onUnFavorite(item)
+                        false -> onFavorite(item)
+                    }
+                }
             }
         }
     }
@@ -68,7 +68,7 @@ fun ItemDetailsForm(
             isEditMode = formState.isEditMode,
             content = formState.content,
             onValueChange = onContentValueChange,
-            onValidate = {text: String -> validateText(text) }
+            onValidate = { text: String -> validateText(text) }
         )
     }
 }

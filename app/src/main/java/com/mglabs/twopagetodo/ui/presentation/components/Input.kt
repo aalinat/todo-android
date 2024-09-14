@@ -1,5 +1,6 @@
 package com.mglabs.twopagetodo.ui.presentation.components
 
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -15,6 +16,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import com.mglabs.twopagetodo.ui.theme.editableOutlinedTextFieldColors
@@ -69,20 +72,20 @@ fun EditableText(
 fun FavoriteAction(isFavorite: Boolean, onAction: () -> Unit) {
     IconButton(onClick = {
         onAction()
-    }) {
+    }, modifier = Modifier.size(24.dp)) {
         var favIcon = Icons.Default.FavoriteBorder
         var favIconDescription = "Mark as Favorite"
         if (isFavorite) {
             favIcon = Icons.Default.Favorite
             favIconDescription = "Unmark as Favorite"
         }
-        Icon(imageVector = favIcon, contentDescription = favIconDescription)
+        Icon(imageVector = favIcon, contentDescription = favIconDescription, tint = Color.Red)
     }
 }
 
 @Composable
 fun DeleteAction(onDelete: () -> Unit) {
-    IconButton(onClick = onDelete) {
+    IconButton(onClick = onDelete, modifier = Modifier.size(24.dp)) {
         Icon(
             imageVector = Icons.Outlined.Delete,
             contentDescription = "Delete Item"

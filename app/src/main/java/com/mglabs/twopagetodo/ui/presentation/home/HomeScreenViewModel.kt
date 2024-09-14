@@ -41,6 +41,24 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
+    fun favorite(id: Int) {
+        viewModelScope.launch {
+            val updatedItem = todoTaskRepository.favorite(id)
+            updatedItem?.let {
+                fetchTasks()
+            }
+        }
+    }
+
+    fun unFavorite(id: Int) {
+        viewModelScope.launch {
+            val updatedItem = todoTaskRepository.unFavorite(id)
+            updatedItem?.let {
+                fetchTasks()
+            }
+        }
+    }
+
     private fun addItem(todo: TodoTask) {
         viewModelScope.launch {
             todoTaskRepository.create(todo)
