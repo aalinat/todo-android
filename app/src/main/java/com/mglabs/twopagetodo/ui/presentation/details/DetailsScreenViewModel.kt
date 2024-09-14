@@ -51,10 +51,7 @@ class DetailsScreenViewModel @Inject constructor(
 
     fun deleteItem() {
         viewModelScope.launch {
-            val updatedItem = todoTaskRepository.delete(_uiState.value.id)
-            updatedItem?.let {
-                _uiState.value = updatedItem.transform()
-            }
+            todoTaskRepository.delete(_uiState.value.id)
         }
     }
 
@@ -71,7 +68,7 @@ class DetailsScreenViewModel @Inject constructor(
 
 
     fun onEditForm(): FormEvent? {
-        val state = _formState.value;
+        val state = _formState.value
         when (state.isEditMode) {
             true -> {
                 if (validateText(_formState.value.title) && validateText(_formState.value.content)

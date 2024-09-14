@@ -1,14 +1,16 @@
 package com.mglabs.twopagetodo.domain.repository
 
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
+import kotlinx.coroutines.flow.Flow
+
 
 interface TodoTaskRepository {
-    suspend fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask>
-    suspend fun findAll(): List<TodoTask>
-    suspend fun update(todo: TodoTask): TodoTask?
-    suspend fun favorite(id: Int): TodoTask?
-    suspend fun unFavorite(id: Int): TodoTask?
-    suspend fun delete(id: Int): TodoTask?
-    suspend fun create(todo: TodoTask): TodoTask
+    fun findAll(): Flow<List<TodoTask>>
     suspend fun findById(todoTaskId: Int): TodoTask?
+
+    suspend fun update(todo: TodoTask): TodoTask?
+    suspend fun favorite(todoTaskId: Int): TodoTask?
+    suspend fun unFavorite(todoTaskId: Int): TodoTask?
+    suspend fun delete(todoTaskId: Int): Int
+    suspend fun create(todo: TodoTask): TodoTask
 }

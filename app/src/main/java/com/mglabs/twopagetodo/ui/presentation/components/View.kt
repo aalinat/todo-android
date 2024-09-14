@@ -16,7 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsFormState
 import com.mglabs.twopagetodo.ui.presentation.utils.toFormattedDate
 import com.mglabs.twopagetodo.ui.presentation.utils.validateText
@@ -63,8 +63,6 @@ fun ItemDetailsForm(
             text = toFormattedDate(formState.createdAt),
             color = MaterialTheme.colorScheme.secondary,
         )
-        Spacer(modifier = Modifier.padding(10.dp))
-        Text(text = "By ${formState.author}")
         Spacer(modifier = Modifier.padding(10.dp))
         EditableText(
             isEditMode = formState.isEditMode,

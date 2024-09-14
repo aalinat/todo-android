@@ -5,7 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.components.ItemList
 import com.mglabs.twopagetodo.ui.presentation.components.LoadingContent
 import com.mglabs.twopagetodo.ui.presentation.components.HomeScreenLayout
@@ -24,8 +24,8 @@ fun HomeScreen(
             is HomeScreenViewModel.State.Loading -> LoadingContent()
             is HomeScreenViewModel.State.Success -> ItemList(
                 result.items,
-                onEdit = {todo -> onNavigateToDetails(todo)},
-                onDelete = {todo -> viewModel.deleteItem(todo.id)}
+                onEdit = { todo -> onNavigateToDetails(todo)},
+                onDelete = { todo -> viewModel.deleteItem(todo.id)}
             )
         }
     }

@@ -2,7 +2,8 @@ package com.mglabs.twopagetodo.ui.presentation.details
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.toRoute
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
+import com.mglabs.twopagetodo.shared.TaskStatus
 import kotlinx.serialization.Serializable
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -10,13 +11,12 @@ import java.time.format.DateTimeFormatter
 private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
 
 
-data class DetailsFormState(var title: String, var content: String, var author: String, var createdAt: String, var isEditMode: Boolean)
+data class DetailsFormState(var title: String, var content: String, var createdAt: String, var isEditMode: Boolean)
 
 
 @Serializable
 data class DetailsScreenState(
     var id: Int,
-    var author: String,
     var title: String,
     var content: String,
     var createdAt: String,
@@ -32,10 +32,11 @@ data class DetailsScreenState(
 fun DetailsScreenState.transform(): TodoTask {
     return TodoTask(
         id,
-        author,
         title,
         content,
         isFavorite,
+        TaskStatus.TODO,
+        LocalDateTime.parse(createdAt, formatter),
         LocalDateTime.parse(createdAt, formatter),
         isDeleted
     )
@@ -45,7 +46,6 @@ fun DetailsScreenState.toForm(): DetailsFormState {
     return DetailsFormState(
         title = title,
         content = content,
-        author = author,
         createdAt = createdAt,
         isEditMode = false
     )
@@ -54,7 +54,6 @@ fun DetailsScreenState.toForm(): DetailsFormState {
 fun TodoTask.transform(): DetailsScreenState {
     return DetailsScreenState(
         id,
-        author,
         title,
         content,
         formatter.format(createdAt),

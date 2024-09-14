@@ -6,7 +6,7 @@ import androidx.compose.runtime.remember
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreen
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreenState
 import com.mglabs.twopagetodo.ui.presentation.details.transform

@@ -2,10 +2,9 @@ package com.mglabs.twopagetodo.ui.presentation.home
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.mglabs.twopagetodo.domain.TodoTask
+import com.mglabs.twopagetodo.domain.model.TodoTask
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,11 +23,11 @@ class HomeScreenViewModel @Inject constructor(
     init {
         fetchTasks()
     }
+
     fun onFloatingActionClick() {
         addItem(
             TodoTask(
                 (Math.random() * 1000).roundToInt(),
-                "Ahmad",
                 "title",
                 "content"
             )
@@ -42,7 +41,6 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-
     private fun addItem(todo: TodoTask) {
         viewModelScope.launch {
             todoTaskRepository.create(todo)
@@ -50,13 +48,13 @@ class HomeScreenViewModel @Inject constructor(
         }
     }
 
-
-
     private fun fetchTasks() {
         viewModelScope.launch {
             _uiState.value = State.Loading
-            delay(1000)
-            _uiState.value = State.Success(todoTaskRepository.findAll())
+            todoTaskRepository.findAll().collect {
+                _uiState.value = State.Success(it)
+            }
+
         }
     }
 

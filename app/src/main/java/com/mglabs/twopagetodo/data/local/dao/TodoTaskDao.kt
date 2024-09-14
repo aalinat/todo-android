@@ -1,10 +1,11 @@
-package com.mglabs.twopagetodo.data.repository
+package com.mglabs.twopagetodo.data.local.dao
 
 import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
-import com.mglabs.twopagetodo.domain.TodoTask
-import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
+import com.mglabs.twopagetodo.data.local.entities.TodoTask
+import javax.inject.Singleton
 
-class TodoTaskRepositoryImpl : TodoTaskRepository {
+@Singleton
+class TodoTaskDao  {
     private val _todos: MutableList<TodoTask> = mutableListOf()
 
     init {
@@ -12,7 +13,6 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
             _todos.add(
                 TodoTask(
                     it,
-                    "Ahmad",
                     "Todo $it",
                     LoremIpsum(100).values.first()
                 )
@@ -20,20 +20,20 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         }
     }
 
-    override suspend fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
+    fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
         return _todos.filter { predicate(it) }
     }
 
-    override suspend fun findAll(): List<TodoTask> {
+    fun findAll(): List<TodoTask> {
         return filterBy { !it.isDeleted }
     }
 
-    override suspend fun update(todo: TodoTask): TodoTask {
+    fun update(todo: TodoTask): TodoTask {
         _todos.replaceAll { if (it.id == todo.id) todo else it }
         return todo
     }
 
-    override suspend fun favorite(id: Int): TodoTask? {
+    fun favorite(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isFavorite = true
@@ -41,7 +41,7 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override suspend fun unFavorite(id: Int): TodoTask? {
+    fun unFavorite(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isFavorite = false
@@ -49,7 +49,7 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override suspend fun delete(id: Int): TodoTask? {
+    fun delete(id: Int): TodoTask? {
         val foundItem = findById(id)
         foundItem?.let {
             foundItem.isDeleted = true
@@ -57,12 +57,12 @@ class TodoTaskRepositoryImpl : TodoTaskRepository {
         return foundItem
     }
 
-    override suspend fun create(todo: TodoTask): TodoTask {
+    fun create(todo: TodoTask): TodoTask {
         _todos.add(todo)
         return todo
     }
 
-    override suspend fun findById(todoTaskId: Int): TodoTask? {
+     fun findById(todoTaskId: Int): TodoTask? {
         return _todos.find { it.id == todoTaskId }
     }
 }
