@@ -24,16 +24,6 @@ class HomeScreenViewModel @Inject constructor(
         fetchTasks()
     }
 
-    fun onFloatingActionClick() {
-        addItem(
-            TodoTask(
-                (Math.random() * 1000).roundToInt(),
-                "title",
-                "content"
-            )
-        )
-    }
-
     fun deleteItem(id: Int) {
         viewModelScope.launch {
             todoTaskRepository.delete(id)

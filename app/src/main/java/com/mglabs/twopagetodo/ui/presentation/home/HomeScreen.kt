@@ -15,11 +15,12 @@ import com.mglabs.twopagetodo.ui.presentation.components.HomeScreenLayout
 fun HomeScreen(
     snackBarHostState: SnackbarHostState,
     viewModel: HomeScreenViewModel = hiltViewModel<HomeScreenViewModel>(),
-    onNavigateToDetails: (TodoTask) -> Unit
+    onNavigateToDetails: (TodoTask) -> Unit,
+    onNavigateToCreateTask: () -> Unit
 ) {
     val state by viewModel.uiState.collectAsState()
 
-    HomeScreenLayout(snackBarHostState, viewModel::onFloatingActionClick) {
+    HomeScreenLayout(snackBarHostState, onNavigateToCreateTask) {
         when (val result = state) {
             is HomeScreenViewModel.State.Loading -> LoadingContent()
             is HomeScreenViewModel.State.Success -> ItemList(

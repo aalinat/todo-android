@@ -7,6 +7,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.mglabs.twopagetodo.domain.model.TodoTask
+import com.mglabs.twopagetodo.ui.presentation.create.CreateTaskScreen
+import com.mglabs.twopagetodo.ui.presentation.create.CreateFormState
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreen
 import com.mglabs.twopagetodo.ui.presentation.details.DetailsScreenState
 import com.mglabs.twopagetodo.ui.presentation.details.transform
@@ -22,10 +24,18 @@ fun AppNavHost(
         composable<HomeScreenState> {
             HomeScreen(snackBarHostState, onNavigateToDetails = { todo: TodoTask ->
                 navController.navigate(todo.transform())
+            }, onNavigateToCreateTask = {
+                navController.navigate(CreateFormState("", "", ""))
             })
         }
         composable<DetailsScreenState> {
             DetailsScreen(snackBarHostState, onNavigateToHome = {
+                navController.navigate(HomeScreenState)
+            })
+        }
+
+        composable<CreateFormState> {
+            CreateTaskScreen(snackBarHostState, onNavigateToHome = {
                 navController.navigate(HomeScreenState)
             })
         }

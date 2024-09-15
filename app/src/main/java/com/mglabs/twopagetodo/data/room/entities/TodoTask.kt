@@ -25,10 +25,10 @@ fun TodoTask.toDomainEntity(): DomainTodoTask {
         id,
         title,
         content,
+        dueDate,
         isFavorite,
         status,
         createdAt,
-        dueDate,
         isFavorite,
         isReminder
     )

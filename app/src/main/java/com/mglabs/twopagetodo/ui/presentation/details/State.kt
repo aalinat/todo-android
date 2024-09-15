@@ -19,8 +19,10 @@ data class DetailsScreenState(
     var id: Int,
     var title: String,
     var content: String,
-    var createdAt: String,
+    var dueDate: String,
     var isFavorite: Boolean = false,
+    var status: TaskStatus = TaskStatus.TODO,
+    var createdAt: String,
     var isDeleted: Boolean = false
 ) {
     companion object {
@@ -34,9 +36,9 @@ fun DetailsScreenState.transform(): TodoTask {
         id,
         title,
         content,
+        LocalDateTime.parse(dueDate, formatter),
         isFavorite,
         TaskStatus.TODO,
-        LocalDateTime.parse(createdAt, formatter),
         LocalDateTime.parse(createdAt, formatter),
         isDeleted
     )
@@ -56,8 +58,10 @@ fun TodoTask.transform(): DetailsScreenState {
         id,
         title,
         content,
-        formatter.format(createdAt),
+        formatter.format(dueDate),
         isFavorite,
+        status,
+        formatter.format(createdAt),
         isDeleted
     )
 }

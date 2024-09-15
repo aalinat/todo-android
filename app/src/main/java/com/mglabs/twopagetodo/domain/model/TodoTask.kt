@@ -9,10 +9,10 @@ data class TodoTask(
     var id: Int,
     var title: String,
     var content: String,
+    var dueDate: LocalDateTime = LocalDateTime.now(),
     var isFavorite: Boolean = false,
     var status: TaskStatus = TaskStatus.TODO,
     var createdAt: LocalDateTime = LocalDateTime.now(),
-    var dueDate: LocalDateTime = LocalDateTime.now(),
     var isDeleted: Boolean = false,
     val isReminder: Boolean = false
 )
@@ -26,7 +26,7 @@ fun TodoTask.toLocalEntity(): LocalTodoTask {
         status,
         createdAt,
         dueDate,
-        isFavorite,
+        isDeleted,
         isReminder
     )
 }

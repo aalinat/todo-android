@@ -23,10 +23,10 @@ fun TodoTask.toDomain(): DomainTodoTask {
         id,
         title,
         content,
+        dueDate,
         isFavorite,
         status,
         createdAt,
-        dueDate,
         isDeleted,
         isReminder
     )

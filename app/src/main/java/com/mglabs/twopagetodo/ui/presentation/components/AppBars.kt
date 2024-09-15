@@ -41,6 +41,23 @@ fun HomeScreenLayout(
 }
 
 @Composable
+fun CreateTaskScreenLayout(
+    snackBarHostState: SnackbarHostState,
+    onNavigateToHome: () -> Unit,
+    saveButton: @Composable () -> Unit,
+    content: @Composable () -> Unit
+) {
+    AppBarLayout(
+        title = {
+            Text(text = "Create Todo Task", color = Color.Red)
+        },
+        onPrev = onNavigateToHome,
+        snackBarHostState = snackBarHostState,
+        floatingButton = saveButton,
+        content = { content() })
+}
+
+@Composable
 fun DetailsScreenLayout(
     formState: DetailsFormState,
     isFavorite: Boolean,
@@ -60,7 +77,8 @@ fun DetailsScreenLayout(
                 isEditMode = formState.isEditMode,
                 content = formState.title,
                 colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,
-                onValueChange = onTitleValueChange
+                onValueChange = onTitleValueChange,
+                isSingleLine = true
             )
         },
         onPrev = onNavigateToHome,
