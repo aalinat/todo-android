@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">twopagetodo</string>
+    <string name="app_widget_description">Todo APP</string>
 </resources>
