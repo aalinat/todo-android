@@ -33,8 +33,8 @@ fun CreateTaskScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () 
             SaveButton {
                 viewModel.viewModelScope.launch {
                     viewModel.onSaveClick()
-                    snackBarHostState.showSnackbar("Created!!")
                     onNavigateToHome()
+                    snackBarHostState.showSnackbar("Created!!")
                 }
             }
         }
