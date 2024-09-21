@@ -7,12 +7,14 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.appwidget.CircularProgressIndicator
 import androidx.glance.appwidget.GlanceAppWidget
 import androidx.glance.appwidget.SizeMode
 import androidx.glance.appwidget.appWidgetBackground
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.provideContent
 import androidx.glance.background
+import androidx.glance.currentState
 import androidx.glance.layout.Box
 import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
@@ -26,9 +28,6 @@ import androidx.glance.text.TextStyle
 class TodoAppWidget: GlanceAppWidget()  {
     override val sizeMode: SizeMode = SizeMode.Exact
 
-//    override val stateDefinition = ImageStateDefinition
-
-
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
             Content()
@@ -36,6 +35,8 @@ class TodoAppWidget: GlanceAppWidget()  {
     }
     @Composable
     fun Content() {
+        val todoState = currentState<TodoState>()
+
         GlanceTheme {
             Box(
                 modifier = GlanceModifier
@@ -44,21 +45,32 @@ class TodoAppWidget: GlanceAppWidget()  {
                     .background(GlanceTheme.colors.background)
                     .cornerRadius(16.dp)
             ) {
-                Text(
-                    text = "Notes App Widget",
-                    style = TextStyle(
-                        color = GlanceTheme.colors.onSurface,
-                        fontSize = 12.sp,
-                        fontStyle = FontStyle.Italic,
-                        textAlign = TextAlign.End,
-                        textDecoration = TextDecoration.Underline
-                    ),
-                    modifier = GlanceModifier
-                        .fillMaxWidth()
-                        .padding(8.dp)
-                        .background(GlanceTheme.colors.surface)
-                )
+                when (todoState) {
+                    TodoState.Loading -> LoadingState()
+                    is TodoState.Success -> SuccessState()
+                }
             }
         }
+    }
+    @Composable
+    private fun SuccessState() {
+        Text(
+            text = "Notes App Widget",
+            style = TextStyle(
+                color = GlanceTheme.colors.onSurface,
+                fontSize = 12.sp,
+                fontStyle = FontStyle.Italic,
+                textAlign = TextAlign.End,
+                textDecoration = TextDecoration.Underline
+            ),
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .padding(8.dp)
+                .background(GlanceTheme.colors.surface)
+        )
+    }
+    @Composable
+    private fun LoadingState() {
+        CircularProgressIndicator()
     }
 }
