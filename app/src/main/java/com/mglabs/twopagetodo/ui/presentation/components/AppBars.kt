@@ -73,7 +73,6 @@ fun DetailsScreenLayout(
     AppBarLayout(
         title = {
             EditableText(
-                onValidate = {text: String -> validateText(text)},
                 isEditMode = formState.isEditMode,
                 content = formState.title,
                 colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,

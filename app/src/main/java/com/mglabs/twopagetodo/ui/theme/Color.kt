@@ -25,6 +25,12 @@ internal val ColorScheme.editableOutlinedTextFieldColors: TextFieldColors
         )
     }
 
+internal val ColorScheme.editableOutlinedTextFieldBasicColors: TextFieldColors
+    @Composable
+    get() {
+        return OutlinedTextFieldDefaults.colors()
+    }
+
 internal val ColorScheme.editableTitleOutlinedTextFieldColors: TextFieldColors
     @Composable
     get() {

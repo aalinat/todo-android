@@ -68,7 +68,7 @@ fun ItemDetailsForm(
             isEditMode = formState.isEditMode,
             content = formState.content,
             onValueChange = onContentValueChange,
-            onValidate = { text: String -> validateText(text) }
+            errorMessage =  formState.titleError
         )
     }
 }

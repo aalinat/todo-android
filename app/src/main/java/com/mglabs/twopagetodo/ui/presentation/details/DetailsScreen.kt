@@ -46,7 +46,7 @@ fun DetailsScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () -> 
         onEditClicked = onEditClicked,
         onDelete = onDeleteClicked,
         onFavorite = viewModel::favorite,
-        onUnFavorite = viewModel::unFavorite
+        onUnFavorite = viewModel::unFavorite,
     ) {
         ItemDetailsForm(
             formState,

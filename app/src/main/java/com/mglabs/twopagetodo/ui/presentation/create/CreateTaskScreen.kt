@@ -17,8 +17,7 @@ import com.mglabs.twopagetodo.ui.presentation.components.CreateTaskScreenLayout
 import com.mglabs.twopagetodo.ui.presentation.components.DatePickerDocked
 import com.mglabs.twopagetodo.ui.presentation.components.EditableText
 import com.mglabs.twopagetodo.ui.presentation.components.SaveButton
-import com.mglabs.twopagetodo.ui.presentation.utils.validateText
-import com.mglabs.twopagetodo.ui.theme.editableTitleOutlinedTextFieldColors
+import com.mglabs.twopagetodo.ui.theme.editableOutlinedTextFieldBasicColors
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,9 +31,15 @@ fun CreateTaskScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () 
         saveButton = {
             SaveButton {
                 viewModel.viewModelScope.launch {
-                    viewModel.onSaveClick()
-                    onNavigateToHome()
-                    snackBarHostState.showSnackbar("Created!!")
+                    if (viewModel.onSaveClick()) {
+                        onNavigateToHome()
+                        snackBarHostState.showSnackbar("Task Created")
+                    } else {
+                        snackBarHostState.showSnackbar(
+                            actionLabel = "Error",
+                            message = formState.getErrors()
+                        )
+                    }
                 }
             }
         }
@@ -42,30 +47,31 @@ fun CreateTaskScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () 
         Column(modifier = Modifier.padding(10.dp)) {
             Row {
                 EditableText(
-                    onValidate = { text: String -> validateText(text) },
                     isEditMode = true,
                     content = formState.title,
-                    colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,
+                    colors = MaterialTheme.colorScheme.editableOutlinedTextFieldBasicColors,
                     onValueChange = viewModel::onTitleValueChange,
                     isSingleLine = true,
-                    label = "Title"
+                    label = "Title",
+                    errorMessage = formState.titleError
+
                 )
             }
             Spacer(modifier = Modifier.padding(10.dp))
             Row {
                 EditableText(
-                    onValidate = { text: String -> validateText(text) },
                     isEditMode = true,
                     content = formState.content,
-                    colors = MaterialTheme.colorScheme.editableTitleOutlinedTextFieldColors,
+                    colors = MaterialTheme.colorScheme.editableOutlinedTextFieldBasicColors,
                     onValueChange = viewModel::onContentValueChange,
                     isSingleLine = false,
-                    label = "Content"
+                    label = "Content",
+                    errorMessage = formState.contentError
                 )
             }
             Spacer(modifier = Modifier.padding(10.dp))
             Row {
-                DatePickerDocked("Due Date", viewModel::onDueDateValueChange)
+                DatePickerDocked("Due Date", formState.dueDate, viewModel::onDueDateValueChange)
             }
         }
     }

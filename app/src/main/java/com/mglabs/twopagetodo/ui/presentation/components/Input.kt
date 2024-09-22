@@ -1,6 +1,7 @@
 package com.mglabs.twopagetodo.ui.presentation.components
 
 import android.icu.text.SimpleDateFormat
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -8,6 +9,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -19,7 +21,6 @@ import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerFormatter
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
@@ -40,6 +41,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
 import com.mglabs.twopagetodo.shared.Config
@@ -91,9 +93,9 @@ fun EditableText(
     colors: TextFieldColors = MaterialTheme.colorScheme.editableOutlinedTextFieldColors,
     textStyle: TextStyle = MaterialTheme.typography.bodyLarge,
     onValueChange: (text: String) -> Unit,
-    onValidate: (String) -> Boolean,
     isSingleLine: Boolean = false,
-    label: String = ""
+    label: String = "",
+    errorMessage: String = "",
 ) {
     OutlinedTextField(
         shape = RoundedCornerShape(8.dp),
@@ -102,7 +104,7 @@ fun EditableText(
         textStyle = textStyle,
         readOnly = !isEditMode,
         enabled = isEditMode,
-        isError = !onValidate(content),
+        isError = errorMessage.isNotEmpty(),
         value = content,
         onValueChange = onValueChange,
         singleLine = isSingleLine,
@@ -140,14 +142,16 @@ fun DeleteAction(onDelete: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun DatePickerDocked(
-    label: String, onChange: (text: String) -> Unit,
+    label: String,
+    value: String,
+    onChange: (text: String) -> Unit,
     datePattern: String = Config.DATE_PATTERN
 ) {
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
     val selectedDate = datePickerState.selectedDateMillis?.let {
         convertMillisToDate(it, datePattern = datePattern)
-    } ?: ""
+    } ?: value
     onChange(selectedDate)
     Box(
         modifier = Modifier.fillMaxWidth()

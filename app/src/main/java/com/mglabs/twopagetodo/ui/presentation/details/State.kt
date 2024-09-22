@@ -11,7 +11,14 @@ import java.time.format.DateTimeFormatter
 private val formatter: DateTimeFormatter = DateTimeFormatter.ISO_DATE_TIME
 
 
-data class DetailsFormState(var title: String, var content: String, var createdAt: String, var isEditMode: Boolean)
+data class DetailsFormState(
+    var title: String,
+    var content: String,
+    var createdAt: String,
+    var isEditMode: Boolean,
+    var titleError: String,
+    var contentError: String
+)
 
 
 @Serializable
@@ -49,7 +56,9 @@ fun DetailsScreenState.toForm(): DetailsFormState {
         title = title,
         content = content,
         createdAt = createdAt,
-        isEditMode = false
+        isEditMode = false,
+        "",
+        ""
     )
 }
 
