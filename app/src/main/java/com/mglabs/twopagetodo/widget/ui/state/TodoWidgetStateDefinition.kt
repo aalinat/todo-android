@@ -1,4 +1,4 @@
-package com.mglabs.twopagetodo.widget
+package com.mglabs.twopagetodo.widget.ui.state
 
 import android.content.Context
 import androidx.datastore.core.CorruptionException
@@ -14,7 +14,7 @@ import java.io.InputStream
 import java.io.OutputStream
 
 object TodoWidgetStateDefinition: GlanceStateDefinition<TodoState> {
-    private const val DATA_STORE_FILENAME = "todoState"
+    private const val DATA_STORE_FILENAME = "TodoAppStateStore_v2"
     private val Context.datastore by dataStore(DATA_STORE_FILENAME, TodoStateSerializer)
 
     override suspend fun getDataStore(context: Context, fileKey: String): DataStore<TodoState> {
@@ -22,7 +22,7 @@ object TodoWidgetStateDefinition: GlanceStateDefinition<TodoState> {
     }
 
     override fun getLocation(context: Context, fileKey: String): File {
-        return context.dataStoreFile(DATA_STORE_FILENAME)
+        return context.dataStoreFile(DATA_STORE_FILENAME + fileKey)
     }
 
     object TodoStateSerializer : Serializer<TodoState> {

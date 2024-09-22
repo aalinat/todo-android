@@ -8,7 +8,7 @@ import com.mglabs.twopagetodo.domain.model.TodoTask as DomainTodoTask
 
 @Entity(tableName = "todos")
 data class TodoTask(
-    @PrimaryKey var id: Int,
+    @PrimaryKey(autoGenerate = true) var id: Int,
     var title: String,
     var content: String,
     var isFavorite: Boolean = false,
