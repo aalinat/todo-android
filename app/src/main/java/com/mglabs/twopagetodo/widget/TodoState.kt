@@ -7,5 +7,5 @@ sealed interface TodoState {
     data object Loading : TodoState
 
     @Serializable
-    data object Success : TodoState
+    data class Success(val todos: List<String>) : TodoState
 }
