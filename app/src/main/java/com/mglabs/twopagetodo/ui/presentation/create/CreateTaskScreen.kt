@@ -36,7 +36,6 @@ fun CreateTaskScreen(snackBarHostState: SnackbarHostState, onNavigateToHome: () 
                         snackBarHostState.showSnackbar("Task Created")
                     } else {
                         snackBarHostState.showSnackbar(
-                            actionLabel = "Error",
                             message = formState.getErrors()
                         )
                     }

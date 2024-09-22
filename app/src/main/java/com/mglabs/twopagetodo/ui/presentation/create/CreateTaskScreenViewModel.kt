@@ -1,12 +1,9 @@
 package com.mglabs.twopagetodo.ui.presentation.create
 
-import android.util.Log
-import androidx.datastore.preferences.protobuf.Internal.BooleanList
 import androidx.lifecycle.ViewModel
 import com.mglabs.twopagetodo.domain.model.TodoTask
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
 import com.mglabs.twopagetodo.shared.Config
-import com.mglabs.twopagetodo.ui.presentation.utils.toFormattedDate
 import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -56,7 +53,7 @@ class CreateTaskScreenViewModel @Inject constructor(
             _formState.value = _formState.value.copy(contentError = "")
             return true
         }
-        _formState.value = _formState.value.copy(contentError = "content field is invalid")
+        _formState.value = _formState.value.copy(contentError = "content is invalid")
         return false
     }
 
@@ -65,7 +62,7 @@ class CreateTaskScreenViewModel @Inject constructor(
     }
 
     suspend fun onSaveClick(): Boolean {
-        if (!handleTitleValidation(_formState.value.title) || !handleContentValidation(_formState.value.content)) {
+        if (!handleTitleValidation(_formState.value.title) or !handleContentValidation(_formState.value.content)) {
             return false
         }
         try {

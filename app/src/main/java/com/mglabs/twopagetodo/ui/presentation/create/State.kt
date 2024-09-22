@@ -13,10 +13,10 @@ data class CreateFormState(
     var dueDateError: String = ""
 ) {
     fun getErrors(): String {
-        var errors = titleError + contentError + dueDateError
+        val errors = listOf(titleError, contentError, dueDateError).filter { it.isNotEmpty() }
         if (errors.isEmpty()) {
-            errors = "Validation Error"
+            return "Validation Error"
         }
-        return errors
+        return errors.joinToString("\n")
     }
 }
