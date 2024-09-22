@@ -29,7 +29,7 @@ fun TodoTask.toDomainEntity(): DomainTodoTask {
         isFavorite,
         status,
         createdAt,
-        isFavorite,
+        isDeleted,
         isReminder
     )
 }

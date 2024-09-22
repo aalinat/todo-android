@@ -8,7 +8,6 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.math.roundToInt
 
 
 @HiltViewModel
@@ -46,13 +45,6 @@ class HomeScreenViewModel @Inject constructor(
             updatedItem?.let {
                 fetchTasks()
             }
-        }
-    }
-
-    private fun addItem(todo: TodoTask) {
-        viewModelScope.launch {
-            todoTaskRepository.create(todo)
-            fetchTasks()
         }
     }
 

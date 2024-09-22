@@ -25,6 +25,7 @@ import androidx.glance.layout.fillMaxSize
 import androidx.glance.layout.fillMaxWidth
 import androidx.glance.layout.padding
 import androidx.glance.text.FontStyle
+import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextAlign
 import androidx.glance.text.TextStyle
@@ -82,12 +83,21 @@ private fun ShowWidget(todos: List<WidgetItem>) {
                         )
                     )
                 )
+                var textColor = GlanceTheme.colors.onSurface
+                var fontStyle = FontStyle.Normal
+                var fontWeight = FontWeight.Normal
+                if (item.isFavorite) {
+                    textColor = ColorProvider(Color.Red)
+                    fontStyle = FontStyle.Italic
+                    fontWeight = FontWeight.Bold
+                }
                 Text(
                     text = item.title,
                     style = TextStyle(
-                        color = GlanceTheme.colors.onSurface,
+                        color = textColor,
                         fontSize = 16.sp,
-                        fontStyle = FontStyle.Italic,
+                        fontWeight = fontWeight,
+                        fontStyle = fontStyle,
                         textAlign = TextAlign.Start
                     ),
                     modifier = GlanceModifier

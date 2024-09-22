@@ -40,7 +40,7 @@ fun TodoTask.toRoomEntity(): RoomTodoTask {
         status,
         createdAt,
         dueDate,
-        isFavorite,
+        isDeleted,
         isReminder
     )
 }
