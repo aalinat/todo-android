@@ -6,6 +6,7 @@ import androidx.glance.GlanceId
 import androidx.glance.appwidget.GlanceAppWidgetManager
 import androidx.glance.appwidget.state.updateAppWidgetState
 import androidx.glance.appwidget.updateAll
+import androidx.hilt.work.HiltWorker
 import androidx.work.CoroutineWorker
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
@@ -13,11 +14,15 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkManager
 import androidx.work.WorkerParameters
-import kotlinx.coroutines.delay
+import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedInject
 
-class TodosWorker(
-    private val context: Context,
-    workerParameters: WorkerParameters
+@HiltWorker
+class TodosWorker  @AssistedInject constructor(
+    private val todoTaskRepository: TodoTaskRepository,
+    @Assisted private val context: Context,
+    @Assisted workerParameters: WorkerParameters,
 )   : CoroutineWorker(context, workerParameters) {
 
     companion object {
@@ -52,8 +57,9 @@ class TodosWorker(
     override suspend fun doWork(): Result {
         return try {
             setWidgetState(TodoState.Loading)
-            delay(1000)
-            setWidgetState(TodoState.Success(listOf("Todo 1", "Todo 2")))
+            todoTaskRepository.findAll().collect { item->
+                setWidgetState(TodoState.Success(item.map { it.title }))
+            }
             Result.success()
         } catch (e: Exception) {
             Log.e(uniqueWorkName, "Error while loading todos", e)
