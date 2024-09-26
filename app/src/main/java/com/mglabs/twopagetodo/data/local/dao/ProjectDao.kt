@@ -1,6 +1,7 @@
 package com.mglabs.twopagetodo.data.local.dao
 
 import com.mglabs.twopagetodo.data.local.entities.Project
+import com.mglabs.twopagetodo.data.local.entities.toDomain
 import javax.inject.Singleton
 
 
@@ -19,5 +20,9 @@ class ProjectDao {
     }
     fun findById(projectId: Int): Project? {
         return _projects.find { it.id == projectId }
+    }
+    fun insert(project: Project): Project {
+        _projects.add(project)
+        return project
     }
 }

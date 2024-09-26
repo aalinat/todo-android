@@ -7,6 +7,7 @@ import kotlinx.serialization.Serializable
 data class CreateFormState(
     var title: String = "",
     var content: String = "",
+    var projectId: Int = 1,
     var dueDate: String = getTodaysDate(),
     var titleError: String = "",
     var contentError: String = "",

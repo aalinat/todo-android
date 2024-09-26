@@ -3,6 +3,7 @@ package com.mglabs.twopagetodo.data.repository.local
 import com.mglabs.twopagetodo.data.local.dao.ProjectDao
 import com.mglabs.twopagetodo.data.local.entities.toDomain
 import com.mglabs.twopagetodo.domain.model.Project
+import com.mglabs.twopagetodo.domain.model.toLocalEntity
 import com.mglabs.twopagetodo.domain.repository.ProjectRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -16,5 +17,10 @@ class ProjectRepositoryImpl : ProjectRepository {
 
     override suspend fun findById(projectId: Int): Project? {
         return projectDao.findById(projectId)?.toDomain()
+    }
+
+    override suspend fun create(project: Project): Project {
+        projectDao.insert(project.toLocalEntity())
+        return project
     }
 }

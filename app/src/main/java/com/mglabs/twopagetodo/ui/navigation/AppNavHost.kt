@@ -25,7 +25,7 @@ fun AppNavHost(
             HomeScreen(snackBarHostState, onNavigateToDetails = { todo: TodoTask ->
                 navController.navigate(todo.transform())
             }, onNavigateToCreateTask = {
-                navController.navigate(CreateFormState("", "", ""))
+                navController.navigate(CreateFormState("", "", 1,""))
             })
         }
         composable<DetailsScreenState> {

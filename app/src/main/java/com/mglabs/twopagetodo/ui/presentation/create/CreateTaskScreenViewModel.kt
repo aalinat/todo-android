@@ -1,12 +1,17 @@
 package com.mglabs.twopagetodo.ui.presentation.create
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.mglabs.twopagetodo.domain.model.Project
 import com.mglabs.twopagetodo.domain.model.TodoTask
+import com.mglabs.twopagetodo.domain.repository.ProjectRepository
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
 import com.mglabs.twopagetodo.shared.Config
+import com.mglabs.twopagetodo.ui.presentation.home.HomeScreenViewModel.State
 import com.mglabs.twopagetodo.ui.presentation.utils.validateText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.launch
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.ZoneOffset
@@ -17,18 +22,26 @@ import javax.inject.Inject
 @HiltViewModel
 class CreateTaskScreenViewModel @Inject constructor(
     private val todoTaskRepository: TodoTaskRepository,
+    private val projectRepository: ProjectRepository
 ) : ViewModel() {
-    private var _formState: MutableStateFlow<CreateFormState> =
-        MutableStateFlow(
-            CreateFormState()
-        )
-
+    private val _uiState: MutableStateFlow<State> = MutableStateFlow(State.Loading)
     // getter
-    val formState = _formState
-
+    val uiState = _uiState
     /**
      * FORM
      */
+    private var _formState
+    : MutableStateFlow<CreateFormState> =
+        MutableStateFlow(
+            CreateFormState()
+        )
+    // getter
+    val formState = _formState
+
+    init {
+        fetchProjects()
+    }
+
     fun onTitleValueChange(text: String) {
         _formState.value = _formState.value.copy(title = text)
         handleTitleValidation(text)
@@ -60,7 +73,15 @@ class CreateTaskScreenViewModel @Inject constructor(
     fun onDueDateValueChange(text: String) {
         _formState.value = _formState.value.copy(dueDate = text)
     }
+    private fun fetchProjects() {
+        viewModelScope.launch {
+            _uiState.value = State.Loading
+            projectRepository.findAll().collect {
+                _uiState.value = State.Success(it)
+            }
 
+        }
+    }
     suspend fun onSaveClick(): Boolean {
         if (!handleTitleValidation(_formState.value.title) or !handleContentValidation(_formState.value.content)) {
             return false
@@ -97,5 +118,9 @@ class CreateTaskScreenViewModel @Inject constructor(
             _formState.value = _formState.value.copy(dueDateError = "date formatting is invalid")
             return false
         }
+    }
+    sealed class State {
+        data object Loading : State()
+        data class Success(val projects: List<Project> = emptyList()) : State()
     }
 }

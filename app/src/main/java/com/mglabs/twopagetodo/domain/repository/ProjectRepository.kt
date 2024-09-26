@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 interface ProjectRepository {
     fun findAll(): Flow<List<Project>>
     suspend fun findById(projectId: Int): Project?
+    suspend fun create(project: Project): Project
 }
