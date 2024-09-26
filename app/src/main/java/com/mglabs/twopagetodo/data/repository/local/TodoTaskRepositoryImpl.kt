@@ -1,4 +1,4 @@
-package com.mglabs.twopagetodo.data.repository
+package com.mglabs.twopagetodo.data.repository.local
 
 
 import com.mglabs.twopagetodo.data.local.dao.TodoTaskDao
@@ -9,7 +9,7 @@ import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
-class LocalTodoTaskRepositoryImpl : TodoTaskRepository {
+class TodoTaskRepositoryImpl : TodoTaskRepository {
     private val todoTaskDao: TodoTaskDao = TodoTaskDao()
 
     override fun findAll(): Flow<List<TodoTask>> {

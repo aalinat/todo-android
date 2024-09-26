@@ -88,6 +88,7 @@ class CreateTaskScreenViewModel @Inject constructor(
                     0,
                     _formState.value.title,
                     _formState.value.content,
+                    1,
                     date
                 )
             )

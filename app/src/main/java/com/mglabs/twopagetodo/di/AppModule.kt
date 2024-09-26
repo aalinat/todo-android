@@ -1,9 +1,12 @@
 package com.mglabs.twopagetodo.di
 
 import android.content.Context
-import com.mglabs.twopagetodo.data.repository.LocalTodoTaskRepositoryImpl
-import com.mglabs.twopagetodo.data.repository.RoomTodoTaskRepositoryImpl
+import com.mglabs.twopagetodo.data.repository.local.TodoTaskRepositoryImpl
+import com.mglabs.twopagetodo.data.repository.room.TodoTaskRepositoryImpl as RoomTodoTaskRepositoryImpl
+import com.mglabs.twopagetodo.data.repository.local.ProjectRepositoryImpl
+import com.mglabs.twopagetodo.data.repository.room.ProjectRepositoryImpl as RoomProjectRepositoryImpl
 import com.mglabs.twopagetodo.data.room.AppDatabase
+import com.mglabs.twopagetodo.domain.repository.ProjectRepository
 import com.mglabs.twopagetodo.domain.repository.TodoTaskRepository
 import com.mglabs.twopagetodo.shared.Config
 import com.mglabs.twopagetodo.shared.DataSource
@@ -22,8 +25,21 @@ object AppModule {
     @Singleton
     fun provideTodoTaskRepository(@ApplicationContext context: Context): TodoTaskRepository {
         return when(Config.DATASOURCE) {
-            DataSource.Static -> LocalTodoTaskRepositoryImpl()
-            DataSource.Room -> RoomTodoTaskRepositoryImpl(AppDatabase.getInstance(context).todoTaskDao())
+            DataSource.Static -> TodoTaskRepositoryImpl()
+            DataSource.Room -> RoomTodoTaskRepositoryImpl(
+                AppDatabase.getInstance(context).todoTaskDao()
+            )
+        }
+    }
+
+    @Provides
+    @Singleton
+    fun provideProjectsRepository(@ApplicationContext context: Context): ProjectRepository {
+        return when(Config.DATASOURCE) {
+            DataSource.Static -> ProjectRepositoryImpl()
+            DataSource.Room -> RoomProjectRepositoryImpl(
+                AppDatabase.getInstance(context).projectDao()
+            )
         }
     }
 }

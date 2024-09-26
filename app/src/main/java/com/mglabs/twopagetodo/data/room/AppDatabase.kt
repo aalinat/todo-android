@@ -5,13 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.mglabs.twopagetodo.data.room.dao.ProjectDao
 import com.mglabs.twopagetodo.data.room.dao.TodoTaskDao
+import com.mglabs.twopagetodo.data.room.entities.Project
 import com.mglabs.twopagetodo.data.room.entities.TodoTask
 
-@Database(entities = [TodoTask::class], version = 1, exportSchema = false)
+@Database(entities = [TodoTask::class, Project::class], version = 2, exportSchema = false)
 @TypeConverters(Converters::class)
 abstract class AppDatabase  : RoomDatabase() {
     abstract fun todoTaskDao(): TodoTaskDao
+    abstract fun projectDao(): ProjectDao
 
     companion object {
         private const val DATABASE_NAME = "todos"
@@ -24,8 +27,10 @@ abstract class AppDatabase  : RoomDatabase() {
             }
         }
         private fun buildDatabase(context: Context): AppDatabase {
+            // context.deleteDatabase(DATABASE_NAME)
             return Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .build()
         }
     }
+
 }

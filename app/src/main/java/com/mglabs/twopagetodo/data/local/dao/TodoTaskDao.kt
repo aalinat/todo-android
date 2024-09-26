@@ -9,18 +9,21 @@ class TodoTaskDao  {
     private val _todos: MutableList<TodoTask> = mutableListOf()
 
     init {
+        val content = LoremIpsum(100).values.first()
+        val projectId = 1
         repeat(5) {
             _todos.add(
                 TodoTask(
                     it,
                     "Todo $it",
-                    LoremIpsum(100).values.first()
+                    content,
+                    projectId
                 )
             )
         }
     }
 
-    fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
+    private fun filterBy(predicate: (todo: TodoTask) -> Boolean): List<TodoTask> {
         return _todos.filter { predicate(it) }
     }
 

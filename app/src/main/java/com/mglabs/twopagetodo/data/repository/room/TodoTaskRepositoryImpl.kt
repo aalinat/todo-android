@@ -1,4 +1,4 @@
-package com.mglabs.twopagetodo.data.repository
+package com.mglabs.twopagetodo.data.repository.room
 
 
 import com.mglabs.twopagetodo.data.room.dao.TodoTaskDao
@@ -12,7 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class RoomTodoTaskRepositoryImpl @Inject constructor(private val todoTaskDao: TodoTaskDao) :
+class TodoTaskRepositoryImpl @Inject constructor(private val todoTaskDao: TodoTaskDao) :
     TodoTaskRepository {
 
     override fun findAll(): Flow<List<TodoTask>> {
